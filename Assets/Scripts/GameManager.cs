@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +19,11 @@ public class GameManager : MonoBehaviour
     public GameObject Win;
     public GameObject Lose;
 
+    [Header("TimeText")]
+    public TextMeshProUGUI timeText;
+    bool timeActive = false;
+    float timer;
+
     [Header("Audio Music-")]
     public AudioClip MusicClip;
     public AudioSource MusicSource;
@@ -34,6 +40,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        timeText.text = "";
+        timer = 31;
+
         for (int i = 0; i < pipeLevels.Length; i++)
         { pipeLevels[i].SetActive(false); }
 
@@ -47,6 +56,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (timeActive)
+        { SetTimer(); }
+
         if (Input.GetKeyDown(KeyCode.E) && !started)
         {
             openingText.SetActive(false);
@@ -56,6 +68,7 @@ public class GameManager : MonoBehaviour
 
     void PlayGame()
     {
+        timeActive = true;
         DifficultyPannel.SetActive(false);
         MusicSource.Play();
         grid.SetActive(true);
@@ -66,14 +79,33 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < pipeLevels.Length; i++)
         { pipeLevels[i].SetActive(false); }
 
+        timeActive = false;
+
         MusicSource.Stop();
         grid.SetActive(false);
+        timeText.text = " ";
     }
 
     public void Quit()
     {
         Win.SetActive(false);
         Lose.SetActive(false);
+    }
+
+    //Timer
+    void SetTimer()
+    {
+        if (timeActive && timer > 0)
+        {
+            timer -= Time.deltaTime * 1;
+            
+            timeText.text = "Time Left: " + (int)timer;
+        }
+        else if (timer <= 0)
+        {
+            timeActive = false;
+            LoseGame();
+        }
     }
 
     // Easy
@@ -84,10 +116,18 @@ public class GameManager : MonoBehaviour
     }
 
     // Medium
-
+    public void Medium()
+    {
+        PlayGame();
+        pipeLevels[1].SetActive(true);
+    }
 
     // Hard
-
+    public void Hard()
+    {
+        PlayGame();
+        pipeLevels[2].SetActive(true);
+    }
 
     // Win 
     public void WinGame()
