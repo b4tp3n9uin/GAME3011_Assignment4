@@ -13,11 +13,15 @@ public class GamePlayManager : MonoBehaviour
     [SerializeField]
     int connectedPipes = 0;
 
+    GameManager gameManager;
+
     
 
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
         numOfPipes = pipeLine.transform.childCount;
 
         pipes = new GameObject[numOfPipes];
@@ -31,16 +35,22 @@ public class GamePlayManager : MonoBehaviour
     public void PipeConnect()
     {
         connectedPipes++;
-
-
-        if (connectedPipes == numOfPipes)
-        {
-            Debug.Log("You Win!");
-        }
     }
 
     public void PipeDisconnect()
     {
         connectedPipes--;
+    }
+
+    public void FlushToilet()
+    {
+        if (connectedPipes == numOfPipes)
+        {
+            gameManager.WinGame();
+        }
+        else
+        {
+            gameManager.LoseGame();
+        }
     }
 }

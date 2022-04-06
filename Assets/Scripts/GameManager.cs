@@ -14,9 +14,22 @@ public class GameManager : MonoBehaviour
     public GameObject[] pipeLevels;
     public GameObject grid;
 
-    [Header("Audio-")]
+    [Header("Game Over Pannels-")]
+    public GameObject Win;
+    public GameObject Lose;
+
+    [Header("Audio Music-")]
     public AudioClip MusicClip;
     public AudioSource MusicSource;
+
+    [Header("Audio Flush-")]
+    public AudioClip ToiletClip;
+    public AudioSource ToiletSource;
+
+    [Header("Audio Fart-")]
+    public AudioClip FartClip;
+    public AudioSource FartSource;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +40,9 @@ public class GameManager : MonoBehaviour
         openingText.SetActive(true);
         DifficultyPannel.SetActive(false);
         grid.SetActive(false);
+
+        Win.SetActive(false);
+        Lose.SetActive(false);
     }
 
     void Update()
@@ -42,9 +58,22 @@ public class GameManager : MonoBehaviour
     {
         DifficultyPannel.SetActive(false);
         MusicSource.Play();
+        grid.SetActive(true);
+    }
 
-        grid.SetActive(true);
-        grid.SetActive(true);
+    void CloseGame()
+    {
+        for (int i = 0; i < pipeLevels.Length; i++)
+        { pipeLevels[i].SetActive(false); }
+
+        MusicSource.Stop();
+        grid.SetActive(false);
+    }
+
+    public void Quit()
+    {
+        Win.SetActive(false);
+        Lose.SetActive(false);
     }
 
     // Easy
@@ -58,4 +87,21 @@ public class GameManager : MonoBehaviour
 
 
     // Hard
+
+
+    // Win 
+    public void WinGame()
+    {
+        ToiletSource.Play();
+        CloseGame();
+        Win.SetActive(true);
+    }
+
+    //Lose
+    public void LoseGame()
+    {
+        FartSource.Play();
+        CloseGame();
+        Lose.SetActive(true);
+    }
 }
