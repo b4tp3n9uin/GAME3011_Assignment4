@@ -10,6 +10,9 @@ public class GamePlayManager : MonoBehaviour
     [SerializeField]
     int numOfPipes = 0;
 
+    [SerializeField]
+    int connectedPipes = 0;
+
     
 
     // Start is called before the first frame update
@@ -25,9 +28,19 @@ public class GamePlayManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PipeConnect()
     {
-        
+        connectedPipes++;
+
+
+        if (connectedPipes == numOfPipes)
+        {
+            Debug.Log("You Win!");
+        }
+    }
+
+    public void PipeDisconnect()
+    {
+        connectedPipes--;
     }
 }
